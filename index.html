@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <title>Lista Telefonica Budel</title>
+    <style>
+        table.dataTable thead th {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <header>
+        <h1 class="titulo">Lista Telefonica Budel</h1>
+        <img src="../imgs/LogoBudel.png" alt="Logo Budel" class="logo">
+    </header>
+    <main>
+        <table class="tabela" id="excelTable">
+            <script>
+                $(document).ready(function () {
+                    // Especifique o caminho da planilha diretamente
+                    var fileUrl = "./TestefWebRamal.xlsx"; // Substitua pela URL da sua planilha
+        
+                        $.ajax({
+                            url: fileUrl,
+                            method: "GET",
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function (data) {
+                                var workbook = XLSX.read(data, { type: 'array' });
+                                var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                                var jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+            
+                                // Exibe os dados na tabela
+                                var table = $("#excelTable");
+                                table.empty();
+            
+                                jsonData.forEach(function (row, rowIndex) {
+                                    var rowElement = $("<tr></tr>");
+                                    row.forEach(function (cell) {
+                                        var cellElement = rowIndex === 0 ? $("<th></th>").text(cell) : $("<td></td>").text(cell);
+                                        rowElement.append(cellElement);
+                                    });
+                                    table.append(rowElement);
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Erro ao carregar a planilha:", error);
+                            }
+                        });
+                    });
+            </script>
+        </table>
+    </main>
+    <footer></footer>
+
+    <script>
+        $(document).ready(function () {
+            // Especifique o caminho da planilha diretamente
+            var fileUrl = "./TestefWebRamal.xlsx"; // Substitua pela URL da sua planilha
+
+                $.ajax({
+                    url: fileUrl,
+                    method: "GET",
+                    xhrFields: {
+                        responseType: 'arraybuffer'
+                    },
+                    success: function (data) {
+                        var workbook = XLSX.read(data, { type: 'array' });
+                        var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        var jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+    
+                        // Exibe os dados na tabela
+                        var table = $("#excelTable");
+                        table.empty();
+    
+                        jsonData.forEach(function (row, rowIndex) {
+                            var rowElement = $("<tr></tr>");
+                            row.forEach(function (cell) {
+                                var cellElement = rowIndex === 0 ? $("<th></th>").text(cell) : $("<td></td>").text(cell);
+                                rowElement.append(cellElement);
+                            });
+                            table.append(rowElement);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erro ao carregar a planilha:", error);
+                    }
+                });
+            });
+    </script>
+</body>
+
+</html>
